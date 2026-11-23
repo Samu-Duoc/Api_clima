@@ -1,0 +1,83 @@
+
+from contextlib import asynccontextmanager
+
+import os
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from database import models as database_models
+from database.connection import create_tables, test_connection
+from routers.clima import router as clima_router
+from routers.sismos import router as sismos_router
+from routers.recepcion import router as recepcion_router
+from routers.ejecuciones import router as ejecuciones_router
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    create_tables()
+    yield
+
+
+app = FastAPI(
+    title="API Clima RPA",
+    description="API de consulta y gestión de información climática",
+    version="1.0.0",
+    lifespan=lifespan,
+)
+
+dashboard_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3001",
+    "http://127.0.0.1:3001",
+]
+additional_origins = [
+    origin.strip()
+    for origin in os.getenv("DASHBOARD_ORIGINS", "").split(",")
+    if origin.strip()
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=list(dict.fromkeys(dashboard_origins + additional_origins)),
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Accept", "Authorization", "Content-Type", "X-API-Key"],
+)
+
+app.include_router(clima_router)
+app.include_router(sismos_router)
+app.include_router(recepcion_router)
+app.include_router(ejecuciones_router)
+
+@app.get("/")
+def inicio():
+    return {
+        "mensaje": "API Clima RPA funcionando"
+    }
+
+@app.get("/test-db")
+def probar_base_datos():
+    try:
+        version = test_connection()
+        return {
+            "estado": "conectado",
+            "base_datos": "Neon PostgreSQL",
+            "version": version
+        }
+    except Exception as e:
+        return {
+            "estado": "error",
+            "detalle": str(e)
+        }
+
+
+@app.get("/health")
+def salud():
+    try:
+        test_connection()
+        return {"status": "ok", "database": "connected"}
+    except Exception:
+        return {"status": "degraded", "database": "disconnected"}
