@@ -33,6 +33,7 @@ def serializar_ejecucion(ejecucion: EjecucionRobot) -> dict:
         "alertas_detectadas": ejecucion.alertas_detectadas,
         "semaforo_global": ejecucion.semaforo_global,
         "semaforos": ejecucion.semaforos,
+        "totem_exp_epoch": ejecucion.totem_exp_epoch,
         "duracion_segundos": duracion_segundos,
     }
 

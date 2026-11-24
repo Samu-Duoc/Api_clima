@@ -65,6 +65,7 @@ class RecepcionRobot(BaseModel):
     alertas_detectadas: int | None = Field(default=None, ge=0)
     semaforo_global: str | None = None
     semaforos: dict[str, Any] | list[Any] | None = None
+    totem_exp_epoch: int | None = Field(default=None, ge=0)
     estaciones: list[dict[str, Any]] | None = None
     archivos: dict[str, Any] | list[Any] | str | None = None
     drive_link: str | None = None

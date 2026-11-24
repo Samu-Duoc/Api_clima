@@ -228,6 +228,7 @@ def recibir_datos_robot(
                 json.dumps(datos.semaforos, ensure_ascii=False)
                 if datos.semaforos is not None else None
             ),
+            totem_exp_epoch=datos.totem_exp_epoch,
             fecha_inicio=fecha_inicio,
             fecha_fin=(
                 datetime.now(timezone.utc)

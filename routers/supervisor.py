@@ -11,7 +11,12 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from database.connection import get_db
-from database.models import EventoSupervisor, EstadoSupervisor, TrabajoRobot
+from database.models import (
+    EjecucionRobot,
+    EventoSupervisor,
+    EstadoSupervisor,
+    TrabajoRobot,
+)
 
 
 router = APIRouter(prefix="/api/robot", tags=["Supervisor Rocketbot"])
@@ -179,6 +184,17 @@ def estado_supervisor_dashboard(db: Session = Depends(get_db)):
         for evento in eventos_alerta
     ]
 
+    ultima_ejecucion = db.scalar(
+        select(EjecucionRobot)
+        .order_by(EjecucionRobot.fecha_inicio.desc())
+        .limit(1)
+    )
+    totem_exp_epoch = (
+        ultima_ejecucion.totem_exp_epoch
+        if ultima_ejecucion and ultima_ejecucion.totem_exp_epoch
+        else None
+    )
+
     return {
         "agente": (
             {
@@ -193,6 +209,7 @@ def estado_supervisor_dashboard(db: Session = Depends(get_db)):
         ),
         "trabajo": trabajo,
         "alertas": alertas,
+        "totem_exp_epoch": totem_exp_epoch,
     }
 
 

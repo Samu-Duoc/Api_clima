@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, Index, Integer, Numeric, String, Text
+from sqlalchemy import BigInteger, DateTime, Index, Integer, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from database.connection import Base
@@ -110,6 +110,7 @@ class EjecucionRobot(Base):
     alertas_detectadas: Mapped[int | None] = mapped_column(Integer, nullable=True)
     semaforo_global: Mapped[str | None] = mapped_column(String(50), nullable=True)
     semaforos: Mapped[str | None] = mapped_column(Text, nullable=True)
+    totem_exp_epoch: Mapped[int | None] = mapped_column(BigInteger, nullable=True)
     fecha_inicio: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False,

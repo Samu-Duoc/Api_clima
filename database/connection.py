@@ -93,6 +93,7 @@ def create_tables():
         "ALTER TABLE ejecuciones_robot ADD COLUMN IF NOT EXISTS alertas_detectadas INTEGER",
         "ALTER TABLE ejecuciones_robot ADD COLUMN IF NOT EXISTS semaforo_global VARCHAR(50)",
         "ALTER TABLE ejecuciones_robot ADD COLUMN IF NOT EXISTS semaforos TEXT",
+        "ALTER TABLE ejecuciones_robot ADD COLUMN IF NOT EXISTS totem_exp_epoch BIGINT",
         "CREATE UNIQUE INDEX IF NOT EXISTS ux_registros_clima_clave_unica "
         "ON registros_clima (clave_unica) WHERE clave_unica IS NOT NULL",
         "CREATE UNIQUE INDEX IF NOT EXISTS ux_registros_sismos_id_externo "
