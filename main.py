@@ -33,6 +33,7 @@ dashboard_origins = [
     "http://127.0.0.1:3000",
     "http://localhost:3001",
     "http://127.0.0.1:3001",
+    "https://dashboard-clima-rho.vercel.app",
 ]
 additional_origins = [
     origin.strip()
